@@ -50,7 +50,7 @@ app.controller('UploadCtrl', [ '$scope', 'fileUpload',
 				var apkfile = $scope.apkfile;
 				var tcfile = $scope.tcfile;
 				
-				console.log('file is ' + JSON.stringify(file));
+				console.log('apkfile is ' + JSON.stringify(apkfile));
 				console.log('tcfile is ' + JSON.stringify(tcfile));
 				
 				var uploadUrl = "/archive/upload";
