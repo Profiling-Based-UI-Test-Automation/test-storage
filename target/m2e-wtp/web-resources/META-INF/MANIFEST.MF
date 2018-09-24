@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Spring Boot Web Static Sample
+Implementation-Version: 1.0.0
+Built-By: kakao
+Implementation-Vendor-Id: io.eva.test
+Build-Jdk: 1.8.0_144
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/test-storage
+Created-By: Maven Integration for Eclipse
+

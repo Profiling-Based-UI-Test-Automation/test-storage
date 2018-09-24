@@ -1,0 +1,65 @@
+<!doctype html>
+<html ng-app="archive">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+  <link rel="stylesheet" href="/css/docs.min.css"/>
+  <style>
+    .bs-example:after {
+      content: "Mobile Application Test 등록";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #bbb;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+<title>Mobile Application Test 등록</title>
+</head> 
+<body>
+  <div class="container">
+    <h1>등록<br/><small> xxx.apk, testcase.zip </small></h1>
+  <hr/>
+
+  <div class="bs-docs-section">
+  <div class="bs-example">
+  <div id="sidebar" ng-controller="UploadCtrl">
+    <div class="form-group">
+      <label>application 파일(x.apk)</label>
+      <input type="file" class="custom-file-input" name="apkfile" id="apkfile"  file-model="apkfile"/>
+    </div>
+    <div class="form-group">
+      <label>test case 파일( zip 으로 압축해서 올려주세요 )</label>
+      <input type="file" class="custom-file-input" name="tcfile" id="tcfile"  file-model="tcfile"/>
+    </div>
+    <div class="form-group">
+      <button ng-click="uploadFile()" class="btn btn-primary">등록</button>
+    </div>    
+    <input type="hidden" name="force" value="true">
+  </div>
+</div>
+</div>
+</div>
+
+<script type='text/javascript' src='http://code.jquery.com/jquery-2.0.3.min.js' ></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+  $(function(){
+    $("#datakey").focus();
+  });
+</script>
+<script src="lib/angular/angular-1.2.16.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
