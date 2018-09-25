@@ -22,11 +22,12 @@ import teststorage.model.ApplicationInfo;
 import teststorage.model.TCInfo;
 import teststorage.repository.ApkInfoRepository;
 import teststorage.repository.ApplicationInfoRepository;
+import teststorage.repository.TCInfoRepository;
 
 @Service
-public class ApkInfoService {
+public class TCInfoService {
 	@Autowired
-	private ApkInfoRepository repository;
+	private TCInfoRepository repository;
 	
 	
 	@Autowired
@@ -47,68 +48,68 @@ public class ApkInfoService {
 			e.printStackTrace();
 		}
 		
-		metaData.put("type", "apkfile");
+		metaData.put("type", "tcfile");
 		// Store file to MongoDB
 		ObjectId fileId = gridOperations.store(fileStream, name, "application/octet-stream", metaData);
 		
 		return fileId;
 	}
 	
-	public boolean deleteFile(ObjectId apkId){
+	public boolean deleteFile(ObjectId tcId){
 		// delete image via id
-		gridOperations.delete(new Query(Criteria.where("_id").is(apkId)));
+		gridOperations.delete(new Query(Criteria.where("_id").is(tcId)));
 		
 		return true;
 	}
 	
-	public void insertApkInfo(String _appId, MultipartFile apkfile){
+	public void insertTCInfo(ObjectId _apkId, MultipartFile tcfile){
 		
-		String fileName = apkfile.getOriginalFilename();
-		ObjectId _apkId = null;
+		String fileName = tcfile.getOriginalFilename();
+		ObjectId _tcId = null;
 		try {
-			_apkId = saveFiles(apkfile, fileName);
+			_tcId = saveFiles(tcfile, fileName);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		if(_apkId != null){
-			ApkInfo apkInfo = new ApkInfo();
-			apkInfo.setApkFileName(fileName);
-			apkInfo.setAppId(_appId);
-			apkInfo.setApkId(_apkId);
-			this.repository.save(apkInfo);	
+		if(_tcId != null){
+			TCInfo tcInfo = new TCInfo();
+			tcInfo.setTCFileName(fileName);
+			tcInfo.setTCId(_tcId);
+			tcInfo.setApkId(_apkId);
+			this.repository.save(tcInfo);	
 		}
 
 		return;
 	}
 	
-	public ApkInfo readApkInfo(ObjectId apkId){
-		ApkInfo findedinfo = this.repository.findByApkId(apkId);
+	public TCInfo readTCInfo(ObjectId tcId){
+		TCInfo findedinfo = this.repository.findByTcId(tcId);
 		return findedinfo;
 	}
 	
-	public boolean updateApkInfo(ObjectId _apkId, MultipartFile _apkfile){
-		ApkInfo findedinfo = this.repository.findByApkId(_apkId);
+	public boolean updateTCInfo(ObjectId _tcId, MultipartFile _tcfile){
+		TCInfo findedinfo = this.repository.findByTcId(_tcId);
 		
 		if(findedinfo != null){
-			String fileName = _apkfile.getOriginalFilename();
-			String appId = findedinfo.getAppId();
-			ObjectId apkId = null;
+			String fileName = _tcfile.getOriginalFilename();
+			ObjectId apkId = findedinfo.getApkId();
+			ObjectId tcId = null;
 			try {
-				apkId = saveFiles(_apkfile, fileName);
+				tcId = saveFiles(_tcfile, fileName);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			if(apkId != null){
-				deleteFile(_apkId);
-				ApkInfo apkInfo = new ApkInfo();
-				apkInfo.setApkFileName(fileName);
-				apkInfo.setAppId(appId);
-				apkInfo.setApkId(apkId);
-				this.repository.save(apkInfo);	
+			if(tcId != null){
+				deleteFile(_tcId);
+				TCInfo tcInfo = new TCInfo();
+				tcInfo.setTCFileName(fileName);
+				tcInfo.setTCId(tcId);
+				tcInfo.setApkId(apkId);
+				this.repository.save(tcInfo);	
 				return true;
 			}
 			else {
@@ -121,14 +122,14 @@ public class ApkInfoService {
     	
 	}
 	
-	public void deleteApkInfo(ObjectId _apkId){
-		ApkInfo findedinfo = this.repository.findByApkId(_apkId);
+	public void deleteTCInfo(ObjectId _tcId){
+		TCInfo findedinfo = this.repository.findByTcId(_tcId);
 		
 		if(findedinfo != null){
-			ObjectId apkId = findedinfo.getApkId();
-			if(apkId != null)
-				deleteFile(apkId);
-			this.repository.deleteByApkId(_apkId);
+			ObjectId tcId = findedinfo.getTCId();
+			if(tcId != null)
+				deleteFile(tcId);
+			this.repository.deleteByTcId(_tcId);
 		}
 		
 		return ;

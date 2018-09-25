@@ -25,9 +25,9 @@ import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
 import teststorage.model.TCInfo;
 
-public interface ApkInfoRepository extends MongoRepository<ApkInfo, ObjectId> {
+public interface TCInfoRepository extends MongoRepository<TCInfo, ObjectId> {
 
-	ApkInfo findByApkId(ObjectId apkId);
-	void deleteByApkId(@Param(value = "apkId") ObjectId apkId);
+	TCInfo findByTcId(ObjectId tcId);
+	void deleteByTcId(@Param(value = "tcId") ObjectId tcId);
 	
 }

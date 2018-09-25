@@ -18,40 +18,42 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
+import teststorage.model.TCInfo;
 import teststorage.service.ApkInfoService;
 import teststorage.service.ApplicationInfoService;
+import teststorage.service.TCInfoService;
 
 @RestController
 @RepositoryRestController
-@Api(value="/ApkController", description="apk file 정보를 저장, 수정, 삭제, 읽을 수 있다.")
-public class ApkController {
+@Api(value="/ApkController", description="testcases 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+public class TCfilesController {
 		
 	@Autowired
-	private ApkInfoService apkInfoService;
+	private TCInfoService tcInfoService;
 
-    @ApiOperation(value="apk file 정보를 읽기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.GET, value = "/apk/{apkId}", produces = "application/json")
-	public @ResponseBody ResponseEntity<?> readApk(@PathVariable("apkId") ObjectId apkId) {
-    		ApkInfo apkInfo = null;
+    @ApiOperation(value="testcases 정보를 읽기위한 인터페이스이다.")	
+    @RequestMapping(method = RequestMethod.GET, value = "/tc/{tcId}", produces = "application/json")
+	public @ResponseBody ResponseEntity<?> readTC(@PathVariable("tcId") ObjectId tcId) {
+    		TCInfo tcInfo = null;
 	    	try{ 
-	    		apkInfo = apkInfoService.readApkInfo(apkId);
+	    		tcInfo = tcInfoService.readTCInfo(tcId);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
 	    	            .body("Exception happened : " + e.getMessage());
 	    	}
     			
-	    	return ResponseEntity.ok(apkInfo);
+	    	return ResponseEntity.ok(tcInfo);
 
 	}
     
 
-    @ApiOperation(value="apk file 정보를 저장하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.POST, value = "/apk/{appId}")
-	public @ResponseBody ResponseEntity<?> saveApkInfo( @PathVariable("appId") String appId,
-			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {
+    @ApiOperation(value="testcases 정보를 저장하기위한 인터페이스이다.")	
+    @RequestMapping(method = RequestMethod.POST, value = "/tc/{apkId}")
+	public @ResponseBody ResponseEntity<?> saveTCInfo( @PathVariable("apkId") ObjectId apkId,
+			@RequestParam(value="tcfile", required=true) MultipartFile tcfile) {
 	    	try {
-	    		apkInfoService.insertApkInfo(appId, apkfile);
+	    		tcInfoService.insertTCInfo(apkId, tcfile);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -60,11 +62,11 @@ public class ApkController {
 	    		
 	    	return ResponseEntity.ok("");
 	}    
-    @ApiOperation(value="apk file 정보를 삭제하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.DELETE, value = "/apk/{apkId}")
-	public @ResponseBody ResponseEntity<?>  removeApkInfo(@PathVariable("apkId") ObjectId apkId) {
+    @ApiOperation(value="testcases 정보를 삭제하기위한 인터페이스이다.")	
+    @RequestMapping(method = RequestMethod.DELETE, value = "/tc/{tcId}")
+	public @ResponseBody ResponseEntity<?>  removeTCInfo(@PathVariable("tcId") ObjectId tcId) {
 	    	try {
-	    		apkInfoService.deleteApkInfo(apkId);
+	    		tcInfoService.deleteTCInfo(tcId);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -74,13 +76,13 @@ public class ApkController {
 	    	return ResponseEntity.ok("");
 	} 
     
-    @ApiOperation(value="apk file 정보를 수정하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.PUT, value = "/apk/{apkId}")
-	public @ResponseBody ResponseEntity<?> updateApkInfo(@PathVariable("apkId") ObjectId apkId,
-			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {
+    @ApiOperation(value="testcases 정보를 수정하기위한 인터페이스이다.")	
+    @RequestMapping(method = RequestMethod.PUT, value = "/tc/{tcId}")
+	public @ResponseBody ResponseEntity<?> updateTCInfo(@PathVariable("tcId") ObjectId tcId,
+			@RequestParam(value="tcfile", required=true) MultipartFile tcfile) {
 		// find the test result//String _appId, ObjectId _apkId, MultipartFile _apkfile
 	    	try {
-	    		boolean ret = apkInfoService.updateApkInfo(apkId, apkfile);
+	    		boolean ret = tcInfoService.updateTCInfo(tcId, tcfile);
 	
 	        	if(ret){
 	    			return ResponseEntity.ok("");
@@ -88,7 +90,7 @@ public class ApkController {
 	        	else {
 	        		return ResponseEntity
 	        	            .status(HttpStatus.NO_CONTENT)
-	        	            .body("There is no apk or invalid apkfile");
+	        	            .body("There is no testcases or invalid tcfile");
 	        	}
 	    	}catch(Exception e){
 	    		return ResponseEntity
