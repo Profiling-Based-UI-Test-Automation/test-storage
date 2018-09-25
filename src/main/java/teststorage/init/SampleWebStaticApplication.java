@@ -16,10 +16,14 @@
 
 package teststorage.init;
 
+import javax.servlet.MultipartConfigElement;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class SampleWebStaticApplication extends SpringBootServletInitializer {
@@ -28,6 +32,15 @@ public class SampleWebStaticApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(SampleWebStaticApplication.class);
 	}
+	
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		// file load multipart 설정 - max file size 
+        factory.setMaxFileSize("1024MB");
+        factory.setMaxRequestSize("1024MB");
+        return factory.createMultipartConfig();
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(SampleWebStaticApplication.class, args);
