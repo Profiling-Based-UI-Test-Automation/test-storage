@@ -1,4 +1,4 @@
-package appstorage.data.jpa.web;
+package teststorage.web;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class ArchiveController {
      */
     @RequestMapping(value = "/uploadApp", method = RequestMethod.POST)
     public @ResponseBody boolean handleAppFileUpload(
-            @RequestParam(value="apkfile", required=false) MultipartFile apkfile ,
+            @RequestParam(value="apkfile", required=true) MultipartFile apkfile ,
             @RequestParam(value="tcfile", required=true) MultipartFile tcfile) {  
     	
 	    	System.out.println("/uploadApp");
