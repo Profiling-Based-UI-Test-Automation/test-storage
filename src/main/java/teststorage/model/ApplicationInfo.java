@@ -3,6 +3,7 @@ package teststorage.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,11 +23,15 @@ public class ApplicationInfo {
 	
 	private String companyName;
 	
+	public ApplicationInfo(){
+		appId = UUID.randomUUID().toString();
+	}
+	
 	public String getAppId() {
 		return appId;
 	}
 
-	public void setAppId(String _appId) {
+	private void setAppId(String _appId) {
 		this.appId = _appId;
 	}
 	
