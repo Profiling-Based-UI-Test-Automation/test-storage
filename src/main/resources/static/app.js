@@ -10,8 +10,8 @@ App.factory('docService', ['$http', '$q', 'urls', function ($http, $q, urls) {
             return factory;
 
             function saveAppTestFiles(apkfile, tcfile) {
-              console.log("apkfile = " + apkfile);
-              console.log("tcfile = " + tcfile);
+              //console.log("apkfile = " + apkfile);
+              //console.log("tcfile = " + tcfile);
             };
 
         }
@@ -25,8 +25,8 @@ App.controller('uploadController',
         $scope.upload = function(){
             var apkfile = $scope.apkfile;
             var tcfile = $scope.tcfile;
-            console.log('apkfile = ' + apkfile);
-            console.log('tcfile = ' + tcfile);
+            //console.log('apkfile = ' + apkfile);
+            //console.log('tcfile = ' + tcfile);
             docService.saveAppTestFiles(apkfile, tcfile);
             
         }
