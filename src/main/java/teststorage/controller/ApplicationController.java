@@ -11,18 +11,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import teststorage.model.ApplicationInfo;
 import teststorage.service.ApplicationInfoService;
 
 @RestController
 @RepositoryRestController
-//@Api(value="/ApplicationController", description="테스트 스크립트 엔진에 의해 생성된 테스트 스크립트에 대한 테스트 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@Api(value="/ApplicationController", description="application 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class ApplicationController {
 		
 	@Autowired
 	private ApplicationInfoService applicationInfoService;
 
-//    @ApiOperation(value="테스트 정보를 읽기위한 인터페이스이다.")	
+    @ApiOperation(value="application 정보를 읽기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/application/{appId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readApplication(@PathVariable("appId") String appId) {
     		ApplicationInfo applicationInfo = null;
@@ -38,7 +40,7 @@ public class ApplicationController {
 
 	}
 
-//    @ApiOperation(value="테스트 정보를 저장하기위한 인터페이스이다.")	
+    @ApiOperation(value="application 정보를 저장하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.POST, value = "/application")
 	public @ResponseBody ResponseEntity<?> saveApplicationInfo(@RequestBody ApplicationInfo applicationInfo) {
 	    	try {
@@ -51,7 +53,7 @@ public class ApplicationController {
 	    		
 	    	return ResponseEntity.ok("");
 	}    
- //   @ApiOperation(value="테스트 정보를 삭제하기위한 인터페이스이다.")	
+    @ApiOperation(value="application 정보를 삭제하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.DELETE, value = "/application/{appId}")
 	public @ResponseBody ResponseEntity<?>  removeApplicationInfo(@PathVariable("appId") String appId) {
 	    	try {
@@ -65,7 +67,7 @@ public class ApplicationController {
 	    	return ResponseEntity.ok("");
 	} 
     
-//    @ApiOperation(value="테스트 정보를 수정하기위한 인터페이스이다.")	
+    @ApiOperation(value="application 정보를 수정하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.PUT, value = "/application")
 	public @ResponseBody ResponseEntity<?> updateApplicationInfo(@RequestBody ApplicationInfo info) {
 		// find the test result

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
 import teststorage.service.ApkInfoService;
@@ -21,13 +23,13 @@ import teststorage.service.ApplicationInfoService;
 
 @RestController
 @RepositoryRestController
-//@Api(value="/ApkController", description="테스트 스크립트 엔진에 의해 생성된 테스트 스크립트에 대한 테스트 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@Api(value="/ApkController", description="apk file 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class ApkController {
 		
 	@Autowired
 	private ApkInfoService apkInfoService;
 
-//    @ApiOperation(value="테스트 정보를 읽기위한 인터페이스이다.")	
+    @ApiOperation(value="apk file 정보를 읽기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/apk/{apkId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readApk(@PathVariable("apkId") ObjectId apkId) {
     		ApkInfo apkInfo = null;
@@ -44,7 +46,7 @@ public class ApkController {
 	}
     
 
-//    @ApiOperation(value="테스트 정보를 저장하기위한 인터페이스이다.")	
+    @ApiOperation(value="apk file 정보를 저장하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.POST, value = "/apk/{appId}")
 	public @ResponseBody ResponseEntity<?> saveApkInfo( @PathVariable("appId") String appId,
 			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {
@@ -58,7 +60,7 @@ public class ApkController {
 	    		
 	    	return ResponseEntity.ok("");
 	}    
- //   @ApiOperation(value="테스트 정보를 삭제하기위한 인터페이스이다.")	
+    @ApiOperation(value="apk file 정보를 삭제하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.DELETE, value = "/apk/{apkId}")
 	public @ResponseBody ResponseEntity<?>  removeApkInfo(@PathVariable("apkId") ObjectId apkId) {
 	    	try {
@@ -72,7 +74,7 @@ public class ApkController {
 	    	return ResponseEntity.ok("");
 	} 
     
-//    @ApiOperation(value="테스트 정보를 수정하기위한 인터페이스이다.")	
+    @ApiOperation(value="apk file 정보를 수정하기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.PUT, value = "/apk/{appId}/{apkId}")
 	public @ResponseBody ResponseEntity<?> updateApkInfo(@PathVariable("appId") String appId,
 			@PathVariable("apkId") ObjectId apkId,
