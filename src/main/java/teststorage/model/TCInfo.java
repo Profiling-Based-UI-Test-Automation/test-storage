@@ -23,6 +23,8 @@ public class TCInfo {
 	
 	private ObjectId apkId;
 	
+	private String versionNum;
+	
 	public ObjectId getTCId() {
 		return tcId;
 	}
@@ -47,10 +49,18 @@ public class TCInfo {
 		this.apkId = _apkId;
 	}
 	
+	public String getVersionNum() {
+		return versionNum;
+	}
+
+	public void setVersionNum(String _version) {
+		this.versionNum = _version;
+	}
+	
 	
 	@Override
 	public String toString() {
-		return "TCInfo [ tcId = " + tcId + ", tcFileName = " + tcFileName + ", apkId = " + apkId  + "]";	
+		return "TCInfo [ tcId = " + tcId + ", versionNum = " + versionNum + ", tcFileName = " + tcFileName + ", apkId = " + apkId  + "]";	
 	}
 	
 }

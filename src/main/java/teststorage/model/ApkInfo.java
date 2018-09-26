@@ -23,6 +23,8 @@ public class ApkInfo {
 	
 	private String appId;
 	
+	private String versionNum;
+	
 	public ObjectId getApkId() {
 		return apkId;
 	}
@@ -47,10 +49,18 @@ public class ApkInfo {
 		this.appId = _appId;
 	}
 	
+	public String getVersionNum() {
+		return versionNum;
+	}
+
+	public void setVersionNum(String _version) {
+		this.versionNum = _version;
+	}
+	
 	
 	@Override
 	public String toString() {
-		return "ApkInfo [ apkId = " + apkId + ", apkFileName = " + apkFileName + ", appId = " + appId  + "]";	
+		return "ApkInfo [ apkId = " + apkId + ", apkFileName = " + apkFileName + ", versionNum = " + versionNum +  ", appId = " + appId  + "]";	
 	}
 	
 }

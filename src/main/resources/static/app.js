@@ -10,6 +10,51 @@ App.factory('docService', ['$http', '$q', 'urls', function ($http, $q, urls) {
             return factory;
 
             function saveAppTestFiles(apkfile, tcfile) {
+              
+              var deferred = $q.defer();
+              var formData = new FormData();
+              formData.append('appName', "app1");
+              formData.append('companyName', "com1");
+              
+              $http.post(urls.DOC_URL+'application', formData,{
+                  transformRequest : angular.identity,
+                  headers : {
+                      'Content-Type' : undefined
+                  }})
+                  .then(
+                      function (response) {
+                          deferred.resolve(response.data);
+                          alert(response.data);
+                      },
+                      function (errResponse) {
+                          alert(errResponse.data.errorMessage);
+                          deferred.reject(errResponse);
+                      }
+                  );
+              
+              
+              //formData.append('file', apkfile);
+              //formData.append('tcfile', tcfile);
+              
+              
+//              $http.post(urls.DOC_URL+'upload', formData,{
+//                  transformRequest : angular.identity,
+//                  headers : {
+//                      'Content-Type' : undefined
+//                  }})
+//                  .then(
+//                      function (response) {
+//                          deferred.resolve(response.data);
+//                          alert(response.data);
+//                      },
+//                      function (errResponse) {
+//                          alert(errResponse.data.errorMessage);
+//                          deferred.reject(errResponse);
+//                      }
+//                  );
+              return deferred.promise;
+              
+              
               //console.log("apkfile = " + apkfile);
               //console.log("tcfile = " + tcfile);
             };
@@ -34,7 +79,7 @@ App.controller('uploadController',
     ]);
 
 App.constant('urls', {
-    DOC_URL: 'http://localhost:8080/doc/'
+    DOC_URL: 'http://localhost:8090/'
 });
 
 App.directive('fileModel', [ '$parse', function($parse) {

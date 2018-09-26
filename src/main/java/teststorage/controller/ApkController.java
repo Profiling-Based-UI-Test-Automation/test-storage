@@ -23,14 +23,15 @@ import teststorage.service.ApplicationInfoService;
 
 @RestController
 @RepositoryRestController
-@Api(value="/ApkController", description="apk file 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@RequestMapping(value = "/apk")
+@Api(value="/apk", description="apk file 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class ApkController {
 		
 	@Autowired
 	private ApkInfoService apkInfoService;
 
     @ApiOperation(value="apk file 정보를 읽기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.GET, value = "/apk/{apkId}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/{apkId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readApk(@PathVariable("apkId") ObjectId apkId) {
     		ApkInfo apkInfo = null;
 	    	try{ 
@@ -47,11 +48,11 @@ public class ApkController {
     
 
     @ApiOperation(value="apk file 정보를 저장하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.POST, value = "/apk/{appId}")
-	public @ResponseBody ResponseEntity<?> saveApkInfo( @PathVariable("appId") String appId,
+    @RequestMapping(method = RequestMethod.POST, value = "/{appId}/{versionId}")
+	public @ResponseBody ResponseEntity<?> saveApkInfo( @PathVariable("appId") String appId, @PathVariable("versionId") String versionId,
 			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {
 	    	try {
-	    		apkInfoService.insertApkInfo(appId, apkfile);
+	    		apkInfoService.insertApkInfo(appId, versionId, apkfile);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -61,7 +62,7 @@ public class ApkController {
 	    	return ResponseEntity.ok("");
 	}    
     @ApiOperation(value="apk file 정보를 삭제하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.DELETE, value = "/apk/{apkId}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{apkId}")
 	public @ResponseBody ResponseEntity<?>  removeApkInfo(@PathVariable("apkId") ObjectId apkId) {
 	    	try {
 	    		apkInfoService.deleteApkInfo(apkId);
@@ -75,12 +76,12 @@ public class ApkController {
 	} 
     
     @ApiOperation(value="apk file 정보를 수정하기위한 인터페이스이다.")	
-    @RequestMapping(method = RequestMethod.PUT, value = "/apk/{apkId}")
-	public @ResponseBody ResponseEntity<?> updateApkInfo(@PathVariable("apkId") ObjectId apkId,
+    @RequestMapping(method = RequestMethod.PUT, value = "/{apkId}")
+	public @ResponseBody ResponseEntity<?> updateApkInfo(@PathVariable("apkId") ObjectId apkId, @PathVariable("versionId") String versionId,
 			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {
 		// find the test result//String _appId, ObjectId _apkId, MultipartFile _apkfile
 	    	try {
-	    		boolean ret = apkInfoService.updateApkInfo(apkId, apkfile);
+	    		boolean ret = apkInfoService.updateApkInfo(apkId, versionId, apkfile);
 	
 	        	if(ret){
 	    			return ResponseEntity.ok("");

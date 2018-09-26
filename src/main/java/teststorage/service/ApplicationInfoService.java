@@ -1,5 +1,7 @@
 package teststorage.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +13,13 @@ public class ApplicationInfoService {
 	@Autowired
 	private ApplicationInfoRepository repository;
 	
-	public void insertApplicationInfo(ApplicationInfo info){
-		this.repository.save(info);		
+	public void insertApplicationInfo(String _appName, String _companyName){
+		
+		ApplicationInfo applicationInfo = new ApplicationInfo();
+		applicationInfo.setAppName(_appName);
+		applicationInfo.setCompanyName(_companyName);
+		
+		this.repository.save(applicationInfo);		
 		return;
 	}
 	
@@ -39,6 +46,11 @@ public class ApplicationInfoService {
 	public void deleteApplicationInfo(String appId){
 		this.repository.deleteByAppId(appId);
 		return ;
+	}
+
+	public List<ApplicationInfo> findAll() {
+		// TODO Auto-generated method stub
+		return repository.findAll();
 	}
 	
 }

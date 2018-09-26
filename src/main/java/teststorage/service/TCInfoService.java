@@ -62,7 +62,7 @@ public class TCInfoService {
 		return true;
 	}
 	
-	public void insertTCInfo(ObjectId _apkId, MultipartFile tcfile){
+	public void insertTCInfo(ObjectId _apkId, String _version, MultipartFile tcfile){
 		
 		String fileName = tcfile.getOriginalFilename();
 		ObjectId _tcId = null;
@@ -78,6 +78,7 @@ public class TCInfoService {
 			tcInfo.setTCFileName(fileName);
 			tcInfo.setTCId(_tcId);
 			tcInfo.setApkId(_apkId);
+			tcInfo.setVersionNum(_version);
 			this.repository.save(tcInfo);	
 		}
 
@@ -89,7 +90,7 @@ public class TCInfoService {
 		return findedinfo;
 	}
 	
-	public boolean updateTCInfo(ObjectId _tcId, MultipartFile _tcfile){
+	public boolean updateTCInfo(ObjectId _tcId, String _version, MultipartFile _tcfile){
 		TCInfo findedinfo = this.repository.findByTcId(_tcId);
 		
 		if(findedinfo != null){
@@ -109,6 +110,7 @@ public class TCInfoService {
 				tcInfo.setTCFileName(fileName);
 				tcInfo.setTCId(tcId);
 				tcInfo.setApkId(apkId);
+				tcInfo.setVersionNum(_version);
 				this.repository.save(tcInfo);	
 				return true;
 			}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package teststorage.init;
+package teststorage;
 
 import javax.servlet.MultipartConfigElement;
 

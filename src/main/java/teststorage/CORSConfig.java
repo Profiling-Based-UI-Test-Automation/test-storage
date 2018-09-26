@@ -1,4 +1,4 @@
-package teststorage.init;
+package teststorage;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class CORSConfig {
 		return new WebMvcConfigurerAdapter() { 
 			public void addCorsMappings(CorsRegistry registry) { 
 				registry.addMapping("/**")
-				.allowedOrigins("http://localhost:8080", "http://127.0.0.1:8080")
+				.allowedOrigins("http://localhost:8090", "http://127.0.0.1:8090", "http://127.0.0.1:8090/application/", "http://127.0.0.1:8090/application", "http://192.168.33.10:8080", "http://localhost:2003", "http://127.0.0.1:2003")
                 .allowedMethods("GET", "DELETE", "PUT", "POST", "OPTIONS");
 			} 
 		}; 

@@ -19,7 +19,6 @@ import com.mongodb.DBObject;
 
 import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
-import teststorage.model.TCInfo;
 import teststorage.repository.ApkInfoRepository;
 import teststorage.repository.ApplicationInfoRepository;
 
@@ -61,7 +60,7 @@ public class ApkInfoService {
 		return true;
 	}
 	
-	public void insertApkInfo(String _appId, MultipartFile apkfile){
+	public void insertApkInfo(String _appId, String _version, MultipartFile apkfile){
 		
 		String fileName = apkfile.getOriginalFilename();
 		ObjectId _apkId = null;
@@ -77,6 +76,7 @@ public class ApkInfoService {
 			apkInfo.setApkFileName(fileName);
 			apkInfo.setAppId(_appId);
 			apkInfo.setApkId(_apkId);
+			apkInfo.setVersionNum(_version);
 			this.repository.save(apkInfo);	
 		}
 
@@ -88,7 +88,7 @@ public class ApkInfoService {
 		return findedinfo;
 	}
 	
-	public boolean updateApkInfo(ObjectId _apkId, MultipartFile _apkfile){
+	public boolean updateApkInfo(ObjectId _apkId, String _version, MultipartFile _apkfile){
 		ApkInfo findedinfo = this.repository.findByApkId(_apkId);
 		
 		if(findedinfo != null){
@@ -104,11 +104,9 @@ public class ApkInfoService {
 			
 			if(apkId != null){
 				deleteFile(_apkId);
-				ApkInfo apkInfo = new ApkInfo();
-				apkInfo.setApkFileName(fileName);
-				apkInfo.setAppId(appId);
-				apkInfo.setApkId(apkId);
-				this.repository.save(apkInfo);	
+				findedinfo.setApkFileName(fileName);
+				findedinfo.setVersionNum(_version);
+				this.repository.save(findedinfo);	
 				return true;
 			}
 			else {

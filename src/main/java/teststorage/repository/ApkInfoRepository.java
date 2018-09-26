@@ -23,7 +23,6 @@ import org.springframework.data.repository.query.Param;
 
 import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
-import teststorage.model.TCInfo;
 
 public interface ApkInfoRepository extends MongoRepository<ApkInfo, ObjectId> {
 
