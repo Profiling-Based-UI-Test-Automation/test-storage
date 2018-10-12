@@ -15,26 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import teststorage.model.TestResourceResult;
-import teststorage.model.TestResult;
+
 import teststorage.service.TestResourceResultService;
-import teststorage.service.TestResultService;
+
 
 @RepositoryRestController
 @RestController
+@RequestMapping(value = "/resource")
 @Api(value="/TestResourceResultController", description="Test Runner가 실행완료 할때 실행 결과(리소스 사용량 변경 추이)정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestResourceResultController {
 		
 	@Autowired
-	private TestResourceResultService resultService;
+	private TestResourceResultService resourceResultService;
 	
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 읽기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.GET, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> readTestResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?> readTestResourceResult(@PathVariable("testId") ObjectId testId) {
     	
     	TestResourceResult result = null;
     	
     	try{
-    		result = resultService.readTestResourceResult(testId);
+    		result = resourceResultService.readTestResourceResult(testId);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -47,9 +48,9 @@ public class TestResourceResultController {
 
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 저장하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<?> saveTestResult(@RequestBody TestResourceResult result) {
+	public @ResponseBody ResponseEntity<?> saveTestResourceResult(@RequestBody TestResourceResult result) {
     	try {
-    		resultService.insertTestResourceResult(result);
+    		resourceResultService.insertTestResourceResult(result);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -61,9 +62,9 @@ public class TestResourceResultController {
     
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 삭제하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?>  removeTestResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?>  removeTestResourceResult(@PathVariable("testId") ObjectId testId) {
     	try {
-    		resultService.deleteTestResourceResult(testId);
+    		resourceResultService.deleteTestResourceResult(testId);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -75,10 +76,10 @@ public class TestResourceResultController {
     
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 수정하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.PUT)
-	public @ResponseBody ResponseEntity<?> updateTestResult(@RequestBody TestResourceResult result) {
+	public @ResponseBody ResponseEntity<?> updateTestResourceResult(@RequestBody TestResourceResult result) {
 		// find the test result
     	try {
-    		boolean ret = resultService.updateTestResourceResult(result);
+    		boolean ret = resourceResultService.updateTestResourceResult(result);
 
         	if(ret){
     			return ResponseEntity.ok("");

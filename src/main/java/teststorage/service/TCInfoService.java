@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -25,53 +26,22 @@ import teststorage.repository.ApplicationInfoRepository;
 import teststorage.repository.TCInfoRepository;
 
 @Service
-public class TCInfoService {
+public class TCInfoService extends GridFSOperations{
 	@Autowired
 	private TCInfoRepository repository;
 	
-	
-	@Autowired
-	GridFsOperations gridOperations;
-	
-	public ObjectId saveFiles(MultipartFile file, String name) throws FileNotFoundException {
-		// Define metaData
-		DBObject metaData = new BasicDBObject();
-		/**
-		 * 1. save an image file to MongoDB
-		 */
-		// Get input file
-		InputStream fileStream = null;
-		try {
-			fileStream = file.getInputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		metaData.put("type", "tcfile");
-		// Store file to MongoDB
-		ObjectId fileId = gridOperations.store(fileStream, name, "application/octet-stream", metaData);
-		
-		return fileId;
-	}
-	
-	public boolean deleteFile(ObjectId tcId){
-		// delete image via id
-		gridOperations.delete(new Query(Criteria.where("_id").is(tcId)));
-		
-		return true;
-	}
-	
 	public void insertTCInfo(ObjectId _apkId, String _version, MultipartFile tcfile){
 		
-		String fileName = tcfile.getOriginalFilename();
+		String fileName = tcfile.getName();
 		ObjectId _tcId = null;
 		try {
-			_tcId = saveFiles(tcfile, fileName);
+			_tcId = saveFiles(tcfile, fileName, GridFSOperations.TC_FILE);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		copyTcFile(_apkId, _version, tcfile);
 		
 		if(_tcId != null){
 			TCInfo tcInfo = new TCInfo();
@@ -81,14 +51,21 @@ public class TCInfoService {
 			tcInfo.setVersionNum(_version);
 			this.repository.save(tcInfo);	
 		}
-
 		return;
 	}
 	
-	public TCInfo readTCInfo(ObjectId tcId){
+	public Resource readTCInfo(ObjectId tcId){
 		TCInfo findedinfo = this.repository.findByTcId(tcId);
-		return findedinfo;
+		ObjectId apkId = findedinfo.getApkId();
+		if(apkId != null) {
+			String fileName = findedinfo.getTCFileName();
+			String version = findedinfo.getVersionNum();
+			String tcFullPath = tcFullPath(apkId, version, fileName);
+			return loadFileAsResource(tcFullPath);
+		}
+		return null;
 	}
+	
 	
 	public boolean updateTCInfo(ObjectId _tcId, String _version, MultipartFile _tcfile){
 		TCInfo findedinfo = this.repository.findByTcId(_tcId);
@@ -98,7 +75,8 @@ public class TCInfoService {
 			ObjectId apkId = findedinfo.getApkId();
 			ObjectId tcId = null;
 			try {
-				tcId = saveFiles(_tcfile, fileName);
+				tcId = saveFiles(_tcfile, fileName, GridFSOperations.TC_FILE);
+				copyTcFile(apkId, _version, _tcfile);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -106,6 +84,7 @@ public class TCInfoService {
 			
 			if(tcId != null){
 				deleteFile(_tcId);
+				deleteTcFile(apkId, findedinfo.getVersionNum(), findedinfo.getTCFileName());
 				TCInfo tcInfo = new TCInfo();
 				tcInfo.setTCFileName(fileName);
 				tcInfo.setTCId(tcId);
@@ -129,8 +108,10 @@ public class TCInfoService {
 		
 		if(findedinfo != null){
 			ObjectId tcId = findedinfo.getTCId();
-			if(tcId != null)
+			if(tcId != null) {
+				deleteTcFile(findedinfo.getApkId(), findedinfo.getVersionNum(), findedinfo.getTCFileName());
 				deleteFile(tcId);
+			}
 			this.repository.deleteByTcId(_tcId);
 		}
 		

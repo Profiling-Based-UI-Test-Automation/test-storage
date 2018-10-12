@@ -5,6 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,60 +21,31 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFSDBFile;
 
 import teststorage.model.ApkInfo;
 import teststorage.model.ApplicationInfo;
 import teststorage.repository.ApkInfoRepository;
 import teststorage.repository.ApplicationInfoRepository;
+import org.springframework.core.io.Resource;
 
 @Service
-public class ApkInfoService {
+public class ApkInfoService extends GridFSOperations{
 	@Autowired
 	private ApkInfoRepository repository;
 	
-	
-	@Autowired
-	GridFsOperations gridOperations;
-	
-	public ObjectId saveFiles(MultipartFile file, String name) throws FileNotFoundException {
-		// Define metaData
-		DBObject metaData = new BasicDBObject();
-		/**
-		 * 1. save an image file to MongoDB
-		 */
-		// Get input file
-		InputStream fileStream = null;
-		try {
-			fileStream = file.getInputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		metaData.put("type", "apkfile");
-		// Store file to MongoDB
-		ObjectId fileId = gridOperations.store(fileStream, name, "application/octet-stream", metaData);
-		
-		return fileId;
-	}
-	
-	public boolean deleteFile(ObjectId apkId){
-		// delete image via id
-		gridOperations.delete(new Query(Criteria.where("_id").is(apkId)));
-		
-		return true;
-	}
-	
 	public void insertApkInfo(String _appId, String _version, MultipartFile apkfile){
 		
-		String fileName = apkfile.getOriginalFilename();
+		String fileName = apkfile.getName();
 		ObjectId _apkId = null;
 		try {
-			_apkId = saveFiles(apkfile, fileName);
+			_apkId = saveFiles(apkfile, fileName, GridFSOperations.APK_FILE);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		copyAppFile(_appId, _version, apkfile);
 		
 		if(_apkId != null){
 			ApkInfo apkInfo = new ApkInfo();
@@ -79,24 +55,33 @@ public class ApkInfoService {
 			apkInfo.setVersionNum(_version);
 			this.repository.save(apkInfo);	
 		}
+		
 
 		return;
 	}
 	
-	public ApkInfo readApkInfo(ObjectId apkId){
+	public Resource readApkInfo(ObjectId apkId){
 		ApkInfo findedinfo = this.repository.findByApkId(apkId);
-		return findedinfo;
+		
+		String appId = findedinfo.getAppId();		
+		String fileName = findedinfo.getApkFileName();
+		String version = findedinfo.getVersionNum();
+		String apkFullPath = apkFullPath(appId, version, fileName);
+		return loadFileAsResource(apkFullPath);
+
 	}
 	
 	public boolean updateApkInfo(ObjectId _apkId, String _version, MultipartFile _apkfile){
 		ApkInfo findedinfo = this.repository.findByApkId(_apkId);
 		
 		if(findedinfo != null){
-			String fileName = _apkfile.getOriginalFilename();
+			String fileName = _apkfile.getName();
 			String appId = findedinfo.getAppId();
+
 			ObjectId apkId = null;
 			try {
-				apkId = saveFiles(_apkfile, fileName);
+				apkId = saveFiles(_apkfile, fileName, GridFSOperations.APK_FILE);
+				copyAppFile(appId, _version, _apkfile);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -104,6 +89,7 @@ public class ApkInfoService {
 			
 			if(apkId != null){
 				deleteFile(_apkId);
+				deleteAppFile(findedinfo.getAppId(), findedinfo.getVersionNum(), findedinfo.getApkFileName());
 				findedinfo.setApkFileName(fileName);
 				findedinfo.setVersionNum(_version);
 				this.repository.save(findedinfo);	
@@ -113,9 +99,9 @@ public class ApkInfoService {
 	    			return false;
 	    		}
 		}
-	    	else {
-	    		return false;
-	    	}	
+	    else {
+	    	return false;
+	    }	
     	
 	}
 	
@@ -124,8 +110,10 @@ public class ApkInfoService {
 		
 		if(findedinfo != null){
 			ObjectId apkId = findedinfo.getApkId();
-			if(apkId != null)
+			if(apkId != null) {
+				deleteAppFile(findedinfo.getAppId(), findedinfo.getVersionNum(), findedinfo.getApkFileName());
 				deleteFile(apkId);
+			}
 			this.repository.deleteByApkId(_apkId);
 		}
 		

@@ -2,7 +2,9 @@ package teststorage.controller;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,21 +35,23 @@ public class ApkController {
     @ApiOperation(value="apk file 정보를 읽기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/{apkId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readApk(@PathVariable("apkId") ObjectId apkId) {
-    		ApkInfo apkInfo = null;
+    		Resource apkFullPath = null;
 	    	try{ 
-	    		apkInfo = apkInfoService.readApkInfo(apkId);
+	    		apkFullPath = apkInfoService.readApkInfo(apkId);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
 	    	            .body("Exception happened : " + e.getMessage());
 	    	}
-    			
-	    	return ResponseEntity.ok(apkInfo);
+	    	
+	    	return ResponseEntity.ok()
+	    			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + apkFullPath.getFilename() + "\"")
+	    			.body(apkFullPath);
 
 	}
     
 
-    @ApiOperation(value="apk file 정보를 저장하기위한 인터페이스이다.")	
+    @ApiOperation(value="apk file 정보를 저장하기 위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.POST, value = "/{appId}/{versionId}")
 	public @ResponseBody ResponseEntity<?> saveApkInfo( @PathVariable("appId") String appId, @PathVariable("versionId") String versionId,
 			@RequestParam(value="apkfile", required=true) MultipartFile apkfile) {

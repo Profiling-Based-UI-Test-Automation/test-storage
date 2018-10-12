@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import teststorage.model.TestDeviceLogResult;
-import teststorage.model.TestResult;
 import teststorage.service.TestDeviceLogResultService;
-import teststorage.service.TestResultService;
+
 
 @RepositoryRestController
 @RestController
+@RequestMapping(value = "/devicelog")
 @Api(value="/TestDeviceLogResultController", description="Test Runner가 실행완료 할때 실행 결과(디바이스 로그)정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestDeviceLogResultController {
 		
 	@Autowired
-	private TestDeviceLogResultService resultService;
+	private TestDeviceLogResultService deviceLogResultService;
 	
     @ApiOperation(value="테스트 실행 디바이스 로그 결과 정보를 읽기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.GET, value = "/{testId}")
@@ -34,7 +34,7 @@ public class TestDeviceLogResultController {
     	TestDeviceLogResult result = null;
     	
     	try{
-    		result = resultService.readTestDeviceLogResult(testId);
+    		result = deviceLogResultService.readTestDeviceLogResult(testId);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,7 +49,7 @@ public class TestDeviceLogResultController {
     @RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<?> saveTestDeviceLogResult(@RequestBody TestDeviceLogResult result) {
     	try {
-    		resultService.insertTestDeviceLogResult(result);
+    		deviceLogResultService.insertTestDeviceLogResult(result);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,7 +63,7 @@ public class TestDeviceLogResultController {
     @RequestMapping(method = RequestMethod.DELETE, value = "{testId}")
 	public @ResponseBody ResponseEntity<?>  removeTestDeviceLogResult(@PathVariable("testId") ObjectId testId) {
     	try {
-    		resultService.deleteTestDeviceLogResult(testId);
+    		deviceLogResultService.deleteTestDeviceLogResult(testId);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -78,7 +78,7 @@ public class TestDeviceLogResultController {
 	public @ResponseBody ResponseEntity<?> updateTestDeviceLogResult(@RequestBody TestDeviceLogResult result) {
 		// find the test result
     	try {
-    		boolean ret = resultService.updateTestDeviceLogResult(result);
+    		boolean ret = deviceLogResultService.updateTestDeviceLogResult(result);
 
         	if(ret){
     			return ResponseEntity.ok("");

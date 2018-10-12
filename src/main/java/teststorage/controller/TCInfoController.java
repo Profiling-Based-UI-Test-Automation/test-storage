@@ -2,6 +2,7 @@ package teststorage.controller;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +36,17 @@ public class TCInfoController {
     @ApiOperation(value="test script 정보를 읽기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/{tcId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readTC(@PathVariable("tcId") ObjectId tcId) {
-    		TCInfo tcInfo = null;
+    		
+    		Resource tcFullPath = null;
 	    	try{ 
-	    		tcInfo = tcInfoService.readTCInfo(tcId);
+	    		tcFullPath = tcInfoService.readTCInfo(tcId);
 	    	}catch(Exception e){
 	    		return ResponseEntity
 	    	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
 	    	            .body("Exception happened : " + e.getMessage());
 	    	}
     			
-	    	return ResponseEntity.ok(tcInfo);
+	    	return ResponseEntity.ok(tcFullPath);
 
 	}
     

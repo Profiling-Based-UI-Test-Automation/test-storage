@@ -19,6 +19,7 @@ import teststorage.service.TestResultService;
 
 @RepositoryRestController
 @RestController
+@RequestMapping(value = "/result")
 @Api(value="/TestResultController", description="Test Runner가 테스트 실행완료 할때 실행 결과(테스트 시간, 테스트 케이스 정보, 테스트 결과, 테스트 실행 로그, 에러 발생 여부)정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestResultController {
 		
