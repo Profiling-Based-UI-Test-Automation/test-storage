@@ -14,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+
 /**
  * 
  */
@@ -43,7 +44,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
                 "test-storage",
-                "등록된 Application, Apk files, Test 등의 정보를 읽기/저장/삭제/업데이트하기 위한 API이다.",
+                "Application, Apk file, Test, Test Result( 테스트케이스 수, 테스트 케이스별 실패/성공 여부, 로그, 수행시간), Test device log, resource 사용 추이, 스냅 샷 등의 정보를 읽기/저장/삭제/업데이트하기 위한 API이다.",
                 "API 1.0",
                 "Terms of service",
                 "domich.hwang@gmail.com",
@@ -52,3 +53,5 @@ public class SwaggerConfig {
         return apiInfo;
     }
 }
+
+

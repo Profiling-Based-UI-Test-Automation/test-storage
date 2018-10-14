@@ -17,16 +17,28 @@
 package teststorage.repository;
 
 
-import org.bson.types.ObjectId;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 
-import teststorage.model.ApkInfo;
-import teststorage.model.ApplicationInfo;
+import teststorage.model.Apk;
+import teststorage.model.ApkVersion;
+import teststorage.model.Tc;
+import teststorage.model.TcVersion;
 
-public interface ApkInfoRepository extends MongoRepository<ApkInfo, ObjectId> {
+public interface TCRepository extends MongoRepository<Tc, String> {
 
-	ApkInfo findByApkId(ObjectId apkId);
-	void deleteByApkId(@Param(value = "apkId") ObjectId apkId);
+	Tc findByTcId(String tcId);
+	void deleteByTcId(@Param(value = "tcId") String tcId);
+	
+	@Query("{'apkId': ?0}, {'versionNum':1, 'tcId': 1}")
+	List<TcVersion> findAllByApkId(@Param(value = "apkId") String apkId);
+	
+	Tc findTopByOrderByVersionNumDesc(String apkId);
+	
+	
+	Tc findByApkIdAndVersionNum(String apkId, String versionNum);
 	
 }

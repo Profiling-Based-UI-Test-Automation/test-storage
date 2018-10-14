@@ -1,35 +1,28 @@
 package teststorage.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
-import com.fasterxml.jackson.databind.JsonNode;
+
 
 import lombok.Data;
 
 @Data
-public class TCInfo {
+public class Tc {
 	@Id
 	private String _id;
 	
-	private ObjectId tcId;
+	private String tcId;
 	
 	private String tcFileName;
 	
-	private ObjectId apkId;
+	private String apkId;
 	
 	private String versionNum;
 	
-	public ObjectId getTCId() {
+	public String getTCId() {
 		return tcId;
 	}
 
-	public void setTCId(ObjectId _tcId) {
+	public void setTCId(String _tcId) {
 		this.tcId = _tcId;
 	}
 	
@@ -41,11 +34,11 @@ public class TCInfo {
 		this.tcFileName = _tcFileName;
 	}
 	
-	public ObjectId getApkId() {
+	public String getApkId() {
 		return apkId;
 	}
 
-	public void setApkId(ObjectId _apkId) {
+	public void setApkId(String _apkId) {
 		this.apkId = _apkId;
 	}
 	

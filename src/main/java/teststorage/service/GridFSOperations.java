@@ -1,20 +1,17 @@
 package teststorage.service;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
+
 
 import org.apache.commons.io.FileUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -26,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
 import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSFile;
 
 
 public class GridFSOperations {
@@ -51,7 +50,7 @@ public class GridFSOperations {
 	GridFsOperations gridOperations;
 	
 	
-	public ObjectId saveFiles(MultipartFile file, String name, String fileType) throws FileNotFoundException {
+	public String saveFiles(MultipartFile file, String name, String fileType) throws FileNotFoundException {
 		// Define metaData
 		DBObject metaData = new BasicDBObject();
 		/**
@@ -68,48 +67,59 @@ public class GridFSOperations {
 		
 		metaData.put("type", fileType);
 		// Store file to MongoDB
-		ObjectId fileId = gridOperations.store(fileStream, name, "application/octet-stream", metaData);
+		GridFSFile fileId = gridOperations.store(fileStream, name, "application/octet-stream", metaData);
 		
-		return fileId;
-	}
-	
-	
-	public String readFile(ObjectId id) {
-		GridFSDBFile result = (GridFSDBFile) gridOperations.find(
-	               new Query().addCriteria(Criteria.where("_id").is(id)));
+		System.out.println("fileId = " + fileId);
 		
-		String tempFile = resourceDirectory + UUID.randomUUID().toString(); 
-		
-		
-		createFolder(tempFile);
-		
-		if(result != null) {
-			
-			String fileName = tempFile + File.separator + result.getFilename();
-			
-			try {
-				result.writeTo( fileName );
-				return fileName;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+		if(fileId != null) {
+			Object id = fileId.getId();
+			if(id != null)
+				return id.toString();
+			else
+				return null;
 		}
-		return null;
-
+		else 
+			return null;
 	}
 	
-	public boolean deletSnapshot(ObjectId testId){
+//	public String readFile(ObjectId id) {
+//		
+//		
+//		GridFSDBFile result = (GridFSDBFile) gridOperations.find(
+//	               new Query().addCriteria(Criteria.where("_id").is(id)));
+//		
+//		String tempFile = resourceDirectory + UUID.randomUUID().toString(); 
+//		
+//		
+//		createFolder(tempFile);
+//		
+//		if(result != null) {
+//			
+//			String fileName = tempFile + File.separator + result.getFilename();
+//			
+//			try {
+//				result.writeTo( fileName );
+//				return fileName;
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//		}
+//		return null;
+//
+//	}
+	
+	public boolean deletSnapshot(String testId){
 		// delete image via id
 		gridOperations.delete(new Query(Criteria.where("_id").is(testId)));
 		
 		return true;
 	}
 	
-	public boolean deleteFile(ObjectId apkId){
+	public boolean deleteFile(String id){
 		// delete image via id
-		gridOperations.delete(new Query(Criteria.where("_id").is(apkId)));
+		gridOperations.delete(new Query(Criteria.where("_id").is(id)));
 		
 		return true;
 	}
@@ -136,18 +146,18 @@ public class GridFSOperations {
 		return appDirectory + File.separator + appId;
 	}
 	
-	public String getTcDirectory(Object _apkId) {
-		return tcDirectory + File.separator + _apkId.toString();
+	public String getTcDirectory(String _apkId) {
+		return tcDirectory + File.separator + _apkId;
 	}
 	
-	public String getSnapshotDirectory(Object testId) {
-		return snapshotDirectory + File.separator + testId.toString();
+	public String getSnapshotDirectory(String testId) {
+		return snapshotDirectory + File.separator + testId;
 	}
 	
-	public void copySnapshotFile(ObjectId _testId, MultipartFile file) {
+	public void copySnapshotFile(String _testId, MultipartFile file) {
 		try{
 			String fileName = file.getName();
-			String testIdPath = makeDirectory("snapshot", _testId.toString());
+			String testIdPath = makeDirectory("snapshot", _testId);
 			if(testIdPath != null) {
 				String testImagePath = testIdPath + File.separator + fileName;
 				Path path = Paths.get(testImagePath);
@@ -179,7 +189,7 @@ public class GridFSOperations {
 		}
 	}
 	
-	public void copyTcFile(ObjectId _apkId, String version, MultipartFile file) {
+	public void copyTcFile(String _apkId, String version, MultipartFile file) {
 		try{
 			String fileName = file.getName();
 			String apkPath = makeDirectory("tc", _apkId.toString()); //makeTcDirectory(_apkId.toString());
@@ -198,7 +208,7 @@ public class GridFSOperations {
 		}
 	}
 	
-	public void deleteSnapshotFile(ObjectId _testId) {
+	public void deleteSnapshotFile(String _testId) {
 		try {
 			String snapshotPath = getSnapshotDirectory(_testId);
 			Path spath = Paths.get(snapshotPath);
@@ -231,7 +241,7 @@ public class GridFSOperations {
 		}
 	}
 	
-	public void deleteTcFile(ObjectId _apkId, String version, String fileName) {
+	public void deleteTcFile(String _apkId, String version, String fileName) {
 		try {
 			String appPath = getTcDirectory(_apkId) + File.separator + version + File.separator + fileName;
 			Path path = Paths.get(appPath);
@@ -241,35 +251,85 @@ public class GridFSOperations {
 		}
 	}
 	
-	public String snapshotFullPath(ObjectId testId) {
+	public String makeSnapshotDirPath(String testId) {
 		
-		String appPath = getSnapshotDirectory(testId) ; 
+		String appPath = getSnapshotDirectory(testId) ;
+		File appDir = new File(appPath);
+		if(testId != null && !appDir.exists()) {
+			appDir.mkdir();
+		}
+		
 		return appPath;
 	}
 	
-	public String apkFullPath(String _appId, String version, String fileName) {
-						
-		String appPath = getAppDirectory(_appId) + File.separator + version + File.separator + fileName; 
-		return appPath;
+	public String makeApkDirPath(String _appId, String version) {
+		String appDir = getAppDirectory(_appId);
+		File appDirectory = new File(appDir);
+		String versionDir = null;
+		if(appDir != null && ! appDirectory.exists()) {
+			appDirectory.mkdir();
+		}
+		
+		versionDir = appDir + File.separator + version;
+		File verDirectory = new File(versionDir);
+		if(versionDir != null && ! verDirectory.exists()) {
+			verDirectory.mkdir();
+		}
+		
+		return versionDir;
 	}
 	
-	public String tcFullPath(ObjectId _apkId, String version, String fileName) {
-		String tcPath = getTcDirectory(_apkId) + File.separator + version + File.separator + fileName; 
-		return tcPath;
+	public String makeTcDirPath(String _apkId, String version) {
+		
+		String tcDir = getTcDirectory(_apkId);
+		File tcDirectory = new File(tcDir);
+		String versionDir = null;
+		
+		if(tcDir != null && ! tcDirectory.exists()) {
+			tcDirectory.mkdir();
+		}
+		
+		versionDir = tcDir + File.separator + version;
+		File verDirectory = new File(versionDir);
+		if(versionDir != null && ! verDirectory.exists()) {
+			verDirectory.mkdir();
+		}
+		
+		return versionDir;
 	}
 	
-	public Resource loadFileAsResource(String fileFullPath) {
-        try {
-            Path filePath = Paths.get(fileFullPath);;
-            Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
-                return resource;
-            } else {
-                return null;
-            }
-        } catch (MalformedURLException ex) {
-            return null;
-        }
+	public Resource loadFileAsResource(String id, String dirPath) {
+	
+//		GridFSDBFile imageFile = gridOperations.findOne(new Query(Criteria.where("_id").is(imageFileId)));
+//		
+//		// Save file back to local disk
+//		imageFile.writeTo("D:\\JSA\\retrieve\\jsa-logo.png");
+		GridFSDBFile result = gridOperations.findOne(
+	               new Query().addCriteria(Criteria.where("_id").is(id)));
+
+		System.out.println("result = " + result);
+		if(result != null) {
+			
+			String fileName = dirPath + File.separator + result.getFilename();
+			try {
+				result.writeTo( fileName );
+				
+				Path filePath = Paths.get(fileName);
+				
+	            Resource resource = new UrlResource(filePath.toUri());
+	            if(resource.exists()) {
+	                return resource;
+	            } else {
+	                return null;
+	            }
+	            
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+        return null;
+        
     }
 	
 	public String createFolder(String folderName){

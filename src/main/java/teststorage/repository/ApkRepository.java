@@ -17,17 +17,32 @@
 package teststorage.repository;
 
 
-import org.bson.types.ObjectId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 
-import teststorage.model.ApkInfo;
-import teststorage.model.ApplicationInfo;
-import teststorage.model.TCInfo;
+import teststorage.model.Apk;
+import teststorage.model.ApkVersion;
+//value = "{ 'userName' : ?0 }", fields = "{ 'requests': 1, '_id': 0 }"
+public interface ApkRepository extends MongoRepository<Apk, String> {
 
-public interface TCInfoRepository extends MongoRepository<TCInfo, ObjectId> {
-
-	TCInfo findByTcId(ObjectId tcId);
-	void deleteByTcId(@Param(value = "tcId") ObjectId tcId);
+	//@Query("{}, { sort: { '_id': -1 }}")
+	Apk findTopByOrderByVersionNumDesc(String appId);
+	
+	Apk findByApkId(String apkId);
+	
+	Apk findByAppIdAndVersionNum(String appId, String versionNum);
+	
+	@Query("{'apkId': ?0}, {'versionNum':1, 'apkId': 1}")
+	List<ApkVersion> findAllByAppId(@Param(value = "appId") String appId);
+	
+	//@Query("{}, {}")
+	void deleteByApkId(@Param(value = "apkId") String apkId);
+	
+	
 	
 }

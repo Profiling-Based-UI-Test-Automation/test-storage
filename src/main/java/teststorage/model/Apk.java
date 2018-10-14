@@ -1,23 +1,16 @@
 package teststorage.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.Data;
 
 @Data
-public class ApkInfo {
+public class Apk {
 	@Id
 	private String _id;
 	
-	private ObjectId apkId;
+	private String apkId;
 	
 	private String apkFileName;
 	
@@ -25,11 +18,11 @@ public class ApkInfo {
 	
 	private String versionNum;
 	
-	public ObjectId getApkId() {
+	public String getApkId() {
 		return apkId;
 	}
 
-	public void setApkId(ObjectId _apkId) {
+	public void setApkId(String _apkId) {
 		this.apkId = _apkId;
 	}
 	

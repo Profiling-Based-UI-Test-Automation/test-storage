@@ -29,7 +29,7 @@ public class MongoGridFsTemplate extends AbstractMongoConfiguration{
 	}
 
 	@Override
-	public MongoClient mongoClient() {
+	public Mongo mongo() throws Exception {
 		// TODO Auto-generated method stub
 		return new MongoClient(mongoAddress);
 	}

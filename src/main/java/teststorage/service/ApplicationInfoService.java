@@ -18,8 +18,10 @@ public class ApplicationInfoService {
 		ApplicationInfo applicationInfo = new ApplicationInfo();
 		applicationInfo.setAppName(_appName);
 		applicationInfo.setCompanyName(_companyName);
-		
-		this.repository.save(applicationInfo);		
+		System.out.println("_appName = " + _appName);
+		System.out.println("_companyName = " + _companyName);
+		ApplicationInfo ret = this.repository.save(applicationInfo);	
+		System.out.println("ret = " + ret);
 		return;
 	}
 	

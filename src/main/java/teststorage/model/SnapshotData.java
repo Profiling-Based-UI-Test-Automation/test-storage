@@ -1,12 +1,11 @@
 package teststorage.model;
 
-import org.bson.types.ObjectId;
 
 public class SnapshotData {
 	private String fileName;
-	private ObjectId objectId;
+	private String objectId;
 	
-	public SnapshotData(String name, ObjectId id) {
+	public SnapshotData(String name, String id) {
 		fileName = name;
 		objectId = id;
 	}
@@ -15,7 +14,7 @@ public class SnapshotData {
 		return fileName;
 	}
 	
-	public ObjectId getObjectId() {
+	public String getObjectId() {
 		return objectId;
 	}
 	

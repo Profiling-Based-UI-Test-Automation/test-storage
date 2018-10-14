@@ -28,7 +28,7 @@ public class ApplicationController {
 	@Autowired
 	private ApplicationInfoService applicationInfoService;
 
-    @ApiOperation(value="application 정보를 읽기위한 인터페이스이다.")	
+    @ApiOperation(value="최신 버전의 application 정보를 읽기위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/{appId}")
 	public @ResponseBody ResponseEntity<?> readApplication(@PathVariable("appId") String appId) {
     		ApplicationInfo applicationInfo = null;
