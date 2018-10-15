@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,16 +33,17 @@ public class TestSnapshotResultService extends GridFSOperations{
 	@Autowired
 	private TestSnapshotResultRepository repository;
 	
-	public void insertSnapshotFiles(ObjectId _testId, MultipartFile[] imgfiles){
-		
+	public void insertSnapshotFiles(String _testId, MultipartFile[] imgfiles){
+		System.out.println("snapshot....." + imgfiles.length);
 		TestSnapshotResult snapshotResult = new TestSnapshotResult();
 		snapshotResult.setTestId(_testId);
 		
 		for(int i = 0; i < imgfiles.length ; ++ i) {
 			String fileName = imgfiles[i].getName();
-			ObjectId imageId = null;
+			String imageId = null;
 			try {
 				imageId = saveFiles(imgfiles[i], fileName, GridFSOperations.IMAGE_FILE);
+				System.out.println("imageId = " + imageId);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -61,18 +61,23 @@ public class TestSnapshotResultService extends GridFSOperations{
 		return;
 	}
 	
-	public ArrayList<Resource> readSnapshotFiles(ObjectId testId){
+	public ArrayList<Resource> readSnapshotFiles(String testId){
 		TestSnapshotResult findedinfo = this.repository.findByTestId(testId);
-		
+		System.out.println("findedinfo = " + findedinfo);
 		if(findedinfo != null) {
 			ArrayList<SnapshotData> snapshots = findedinfo.getImages();
 		
 			ArrayList<Resource> ret = new ArrayList<Resource>();
 			
 			for(int i = 0 ; i < snapshots.size() ; ++ i) {
-				String snapshotFullPath = snapshotFullPath(testId);
-				Resource resource = loadFileAsResource(snapshotFullPath);
-				ret.add(resource);				
+				String snapshotFullPath = makeSnapshotDirPath(testId);
+				SnapshotData snapshot = snapshots.get(i);
+				if(snapshot != null) {
+					Resource resource = loadFileAsResource(snapshot.getObjectId(), snapshotFullPath);
+					System.out.println("resource = " + resource);
+					ret.add(resource);				
+				}
+				
 			}
 			
 			return ret;
@@ -83,7 +88,7 @@ public class TestSnapshotResultService extends GridFSOperations{
 
 	}
 	
-	public boolean updateSnapshotFiles(ObjectId _testId, MultipartFile[] imgfiles){
+	public boolean updateSnapshotFiles(String _testId, MultipartFile[] imgfiles){
 		TestSnapshotResult findedinfo = this.repository.findByTestId(_testId);
 		
 		if(findedinfo != null){
@@ -96,7 +101,7 @@ public class TestSnapshotResultService extends GridFSOperations{
 		
 		for(int i = 0; i < imgfiles.length ; ++ i) {
 			String fileName = imgfiles[i].getName();
-			ObjectId imageId = null;
+			String imageId = null;
 			try {
 				imageId = saveFiles(imgfiles[i], fileName, GridFSOperations.IMAGE_FILE);
 			} catch (FileNotFoundException e) {
@@ -116,7 +121,7 @@ public class TestSnapshotResultService extends GridFSOperations{
     	
 	}
 	
-	public void deleteApkInfo(ObjectId _testId){
+	public void deleteApkInfo(String _testId){
 		TestSnapshotResult findedinfo = this.repository.findByTestId(_testId);
 		
 		if(findedinfo != null){

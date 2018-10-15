@@ -17,17 +17,13 @@
 package teststorage.repository;
 
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
-
-import teststorage.model.ApkInfo;
-import teststorage.model.ApplicationInfo;
 import teststorage.model.TestSnapshotResult;
 
-public interface TestSnapshotResultRepository extends MongoRepository<TestSnapshotResult, ObjectId> {
+public interface TestSnapshotResultRepository extends MongoRepository<TestSnapshotResult, String> {
 
-	TestSnapshotResult findByTestId(ObjectId testId);
-	void deleteByTestId(@Param(value = "testId") ObjectId testId);
+	TestSnapshotResult findByTestId(String testId);
+	void deleteByTestId(@Param(value = "testId") String testId);
 	
 }

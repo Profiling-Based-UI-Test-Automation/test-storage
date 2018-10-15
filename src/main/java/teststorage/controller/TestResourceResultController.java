@@ -1,6 +1,5 @@
 package teststorage.controller;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,7 @@ public class TestResourceResultController {
 	
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 읽기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.GET, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> readTestResourceResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?> readTestResourceResult(@PathVariable("testId") String testId) {
     	
     	TestResourceResult result = null;
     	
@@ -62,7 +61,7 @@ public class TestResourceResultController {
     
     @ApiOperation(value="테스트 실행 리소스 사용량 변경 추이 결과 정보를 삭제하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?>  removeTestResourceResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?>  removeTestResourceResult(@PathVariable("testId") String testId) {
     	try {
     		resourceResultService.deleteTestResourceResult(testId);
     	}catch(Exception e){

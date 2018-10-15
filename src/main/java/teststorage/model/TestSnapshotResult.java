@@ -2,20 +2,25 @@ package teststorage.model;
 
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
+import lombok.Data;
 
 
+@Data
 public class TestSnapshotResult {
 	
-	private ObjectId testId;
+	@Id
+	private String _id;
+	private String testId;
 	
 	private ArrayList<SnapshotData> images;
 	
-	public ObjectId getTestId() {
+	public String getTestId() {
 		return testId;
 	}
 
-	public void setTestId(ObjectId id) {
+	public void setTestId(String id) {
 		this.testId = id;
 	}
 	
@@ -27,10 +32,12 @@ public class TestSnapshotResult {
 		return images;
 	}
 	
-	public void addImage(ObjectId id, String fileName){
+	public void addImage(String id, String fileName){
 		if(images == null)
 			images = new ArrayList<SnapshotData>();
-		SnapshotData snapshot = new SnapshotData(fileName, id);
+		SnapshotData snapshot = new SnapshotData();
+		snapshot.setFileName(fileName);
+		snapshot.setObjectId(id);
 		images.add(snapshot);
 		
 	}

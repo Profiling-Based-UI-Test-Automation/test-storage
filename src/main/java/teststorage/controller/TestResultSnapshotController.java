@@ -2,7 +2,6 @@ package teststorage.controller;
 
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -31,8 +30,8 @@ public class TestResultSnapshotController {
 	
     @ApiOperation(value="테스트 실행 스크린샷 정보를 읽기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.GET, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> readTestResult(@PathVariable("testId") ObjectId testId) {
-    	
+	public @ResponseBody ResponseEntity<?> readTestResult(@PathVariable("testId") String testId) {
+    	System.out.println("readTestResult");
     	ArrayList<Resource>  result = null;
     	
     	try{
@@ -48,10 +47,10 @@ public class TestResultSnapshotController {
 	}
 
     @ApiOperation(value="테스트 실행 스크린샷 정보를 저장하기위한 인터페이스이다.")
-    @RequestMapping(method = RequestMethod.POST, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> saveTestResult(@PathVariable("testId") ObjectId testId, @RequestParam(value="images", required=true) MultipartFile[] images) {
+    @RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<?> saveTestResult(@RequestParam(value="images", required=true) MultipartFile[] images) {
     	try {
-    		resultService.insertSnapshotFiles(testId, images);
+    		resultService.insertSnapshotFiles("1", images);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,7 +62,7 @@ public class TestResultSnapshotController {
     
     @ApiOperation(value="테스트 실행 스크린샷 정보를 삭제하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?>  removeTestResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?>  removeTestResult(@PathVariable("testId") String testId) {
     	try {
     		resultService.deleteSnapshotFile(testId);
     	}catch(Exception e){
@@ -77,7 +76,7 @@ public class TestResultSnapshotController {
     
     @ApiOperation(value="테스트 실행 스크린샷 정보를 수정하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.PUT, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> updateTestResult(@PathVariable("testId") ObjectId testId, @RequestParam(value="images", required=true) MultipartFile[] images) {
+	public @ResponseBody ResponseEntity<?> updateTestResult(@PathVariable("testId") String testId, @RequestParam(value="images", required=true) MultipartFile[] images) {
 		// find the test result
     	try {
     		boolean ret = resultService.updateSnapshotFiles(testId, images);

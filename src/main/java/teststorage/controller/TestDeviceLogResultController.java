@@ -1,6 +1,5 @@
 package teststorage.controller;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class TestDeviceLogResultController {
 	
     @ApiOperation(value="테스트 실행 디바이스 로그 결과 정보를 읽기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.GET, value = "/{testId}")
-	public @ResponseBody ResponseEntity<?> readTestDeviceLogResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?> readTestDeviceLogResult(@PathVariable("testId") String testId) {
     	
     	TestDeviceLogResult result = null;
     	
@@ -61,7 +60,7 @@ public class TestDeviceLogResultController {
     
     @ApiOperation(value="테스트 실행 디바이스 로그 결과 정보를 삭제하기위한 인터페이스이다.")
     @RequestMapping(method = RequestMethod.DELETE, value = "{testId}")
-	public @ResponseBody ResponseEntity<?>  removeTestDeviceLogResult(@PathVariable("testId") ObjectId testId) {
+	public @ResponseBody ResponseEntity<?>  removeTestDeviceLogResult(@PathVariable("testId") String testId) {
     	try {
     		deviceLogResultService.deleteTestDeviceLogResult(testId);
     	}catch(Exception e){

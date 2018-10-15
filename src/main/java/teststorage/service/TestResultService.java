@@ -1,6 +1,5 @@
 package teststorage.service;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teststorage.model.TestResult;
@@ -16,14 +15,14 @@ public class TestResultService {
 		return;
 	}
 	
-	public TestResult readTestResult(ObjectId testId){
+	public TestResult readTestResult(String testId){
 		TestResult findedresult = this.resultRespository.findByTestId(testId);
     	return findedresult;
 	}
 	
 	public boolean updateTestResult(TestResult result){
 		
-		ObjectId objectId = result.getTestId();
+		String objectId = result.getTestId();
 		
 		if(objectId != null) {
 			TestResult findedresult = this.resultRespository.findByTestId(objectId);
@@ -42,7 +41,7 @@ public class TestResultService {
 		return false;
 	}
 	
-	public void deleteTestResult(ObjectId testId){
+	public void deleteTestResult(String testId){
 		this.resultRespository.deleteByTestId(testId);
 	}
 	

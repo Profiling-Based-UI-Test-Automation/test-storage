@@ -16,18 +16,16 @@
 
 package teststorage.repository;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import teststorage.model.TestDeviceLogResult;
 import teststorage.model.TestResult;
 
 
 
-public interface TestResultRepository extends MongoRepository<TestResult, ObjectId> {
+public interface TestResultRepository extends MongoRepository<TestResult, String> {
 
-	TestResult findByTestId(ObjectId objectId);
-	void deleteByTestId(ObjectId testId);
+	TestResult findByTestId(String testId);
+	void deleteByTestId(String testId);
 	
 	
 }

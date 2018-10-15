@@ -2,23 +2,20 @@ package teststorage.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
-import org.bson.types.ObjectId;
 
-
+@Data
 public class TestResult {
 		
-	private ObjectId testId;
+	@Id
+	private String _id;
+	private String testId;
 	
 	private ArrayList<String> testlog;
 	
@@ -32,11 +29,11 @@ public class TestResult {
 	
 	private int passCount;
 	
-	public ObjectId getTestId() {
+	public String getTestId() {
 		return testId;
 	}
 
-	public void setTestId(ObjectId id) {
+	public void setTestId(String id) {
 		this.testId = id;
 	}
 	
