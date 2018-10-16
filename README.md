@@ -16,7 +16,7 @@ Spring Boot 1.5.7.RELEASE 기반 구현<br>
 ## 실행 전 요구사항
 MongoDB 셋업 및 데몬 실행<br>
 
-####[몽고 디비 설정 정보](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/development/src/main/resources/application.properties)
+## [몽고 디비 설정 정보](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/development/src/main/resources/application.properties)
 
 ## [Application](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/development/src/main/java/teststorage/controller/ApplicationController.java) <br>
 어플리케이션에 대한 정보를 저장/수정/삭제/읽을 수 있다.<br>
