@@ -12,10 +12,10 @@ import com.mongodb.MongoClient;
 @Configuration
 public class MongoGridFsTemplate extends AbstractMongoConfiguration{
 	
-	@Value("${jsa.mongo.address}")
+	@Value("${mongo.address}")
 	private String mongoAddress; 
 	
-	@Value("${jsa.mongo.database}")
+	@Value("${mongo.database}")
 	private String mongoDatabase;
 	
 	@Bean
