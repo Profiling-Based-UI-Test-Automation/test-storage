@@ -73,7 +73,7 @@ public class TestSnapshotResultService extends GridFSOperations{
 				String snapshotFullPath = makeSnapshotDirPath(testId);
 				SnapshotData snapshot = snapshots.get(i);
 				if(snapshot != null) {
-					Resource resource = loadFileAsResource(snapshot.getObjectId(), snapshotFullPath);
+					Resource resource = loadFileAsResource(snapshot.getObjectId(), snapshotFullPath, ("image"+i));
 					System.out.println("resource = " + resource);
 					ret.add(resource);				
 				}
