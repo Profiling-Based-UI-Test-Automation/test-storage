@@ -298,6 +298,35 @@ public class GridFSOperations {
 		return versionDir;
 	}
 	
+	public Resource loadFileAsResource(String id, String dirPath, String imageName) {
+		GridFSDBFile result = gridOperations.findOne(
+	               new Query().addCriteria(Criteria.where("_id").is(id)));
+
+		System.out.println("result = " + result);
+		if(result != null) {
+			
+			String fileName = dirPath + File.separator + imageName;
+			try {
+				result.writeTo( fileName );
+				
+				Path filePath = Paths.get(fileName);
+				
+	            Resource resource = new UrlResource(filePath.toUri());
+	            if(resource.exists()) {
+	                return resource;
+	            } else {
+	                return null;
+	            }
+	            
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+     return null;
+		
+	}
+	
 	public Resource loadFileAsResource(String id, String dirPath) {
 	
 //		GridFSDBFile imageFile = gridOperations.findOne(new Query(Criteria.where("_id").is(imageFileId)));

@@ -22,7 +22,7 @@ import teststorage.service.TestSnapshotResultService;
 @RepositoryRestController
 @RestController
 @RequestMapping(value = "/snapshot")
-@Api(value="/TestResultSnapshotController", description="Test Runner가 테스트 실행완료 할때 실행 결과(스크린샷)  정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@Api(value="/TestResultSnapshotController", description="테스트 실행 결과(스크린샷)정보를 서버에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestResultSnapshotController {
 		
 	@Autowired
@@ -47,10 +47,10 @@ public class TestResultSnapshotController {
 	}
 
     @ApiOperation(value="테스트 실행 스크린샷 정보를 저장하기위한 인터페이스이다.")
-    @RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<?> saveTestResult(@RequestParam(value="images", required=true) MultipartFile[] images) {
+    @RequestMapping(method = RequestMethod.POST, value = "/{testId}")
+	public @ResponseBody ResponseEntity<?> saveTestResult(@PathVariable("testId") String testId, @RequestParam(value="images", required=true) MultipartFile[] images) {
     	try {
-    		resultService.insertSnapshotFiles("1", images);
+    		resultService.insertSnapshotFiles(testId, images);
     	}catch(Exception e){
     		return ResponseEntity
     	            .status(HttpStatus.INTERNAL_SERVER_ERROR)

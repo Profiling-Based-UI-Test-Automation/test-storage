@@ -21,7 +21,7 @@ import teststorage.service.TestResourceResultService;
 @RepositoryRestController
 @RestController
 @RequestMapping(value = "/resource")
-@Api(value="/TestResourceResultController", description="Test Runner가 실행완료 할때 실행 결과(리소스 사용량 변경 추이)정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@Api(value="/TestResourceResultController", description="테스트 실행 결과(리소스 사용량 변경 추이)정보를 서버에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestResourceResultController {
 		
 	@Autowired

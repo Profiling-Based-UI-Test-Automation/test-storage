@@ -21,7 +21,7 @@ public class ApkService extends GridFSOperations{
 	
 	public void insertApk(String _appId, String _version, MultipartFile apkfile){
 		
-		String fileName = apkfile.getName();
+		String fileName = apkfile.getOriginalFilename();//apkfile.getName();
 		String _apkId = null;
 		try {
 			_apkId = saveFiles(apkfile, fileName, GridFSOperations.APK_FILE);

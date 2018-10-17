@@ -34,7 +34,7 @@ public class ApkController {
 	@Autowired
 	private ApkService apkInfoService;
 	
-    @ApiOperation(value="앱의 모든 apk file의 버전 정보를 얻기 위한 인터페이스이다.")	
+    @ApiOperation(value="앱에 등록된 모든 apk file의 버전 정보를 얻기 위한 인터페이스이다.")	
     @RequestMapping(method = RequestMethod.GET, value = "/allversion/{appId}", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> readAllApkVersionInfo(@PathVariable("appId") String appId) {
     		List<ApkVersion> apkFullPath = null;

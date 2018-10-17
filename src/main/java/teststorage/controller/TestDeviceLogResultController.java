@@ -20,7 +20,7 @@ import teststorage.service.TestDeviceLogResultService;
 @RepositoryRestController
 @RestController
 @RequestMapping(value = "/devicelog")
-@Api(value="/TestDeviceLogResultController", description="Test Runner가 실행완료 할때 실행 결과(디바이스 로그)정보를 몽고 디비에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
+@Api(value="/TestDeviceLogResultController", description="테스트 실행 결과(디바이스 로그)정보를 서버에 전송한다. 실행 결과 정보를 저장, 수정, 삭제, 읽을 수 있다.")
 public class TestDeviceLogResultController {
 		
 	@Autowired
