@@ -1,5 +1,5 @@
 # test-storage
-[Application Information](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/ApplicationInfo.java), [Apk File](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/ApkInfo.java), [Test script Information](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TCInfo.java), [Test Result](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestResult.java), [Device Log](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestDeviceLogResult.java), [Resource 사용 추이](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestResourceResult.java), Test Snapshot File 등의 정보를 읽기/저장/삭제/업데이트하기 위한 API이다.<br>
+[Application Information](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/ApplicationInfo.java), [Apk File](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/ApkInfo.java), [Test script Information](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TCInfo.java), [Test Result](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestResult.java), [Device Log](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestDeviceLogResult.java), [Resource 사용 추이](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/TestResourceResult.java), [Test 등록 정보](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/master/src/main/java/teststorage/model/Test.java), Test Snapshot File 등의 정보를 읽기/저장/삭제/업데이트하기 위한 API이다.<br>
 
 ### 개발 툴 정보
 Spring Tool Suite 4 <br>
@@ -92,7 +92,14 @@ MongoDB 셋업 및 데몬 실행<br>
    * PUT /snapshot?{"testId": "string", "images": [{formData}]} testId를 갖는 테스트 실행결과(스크린 샷) 변경<br>
    * POST /snapshot?{"testId": "string", "images": [{formData}]} testId를 갖는 테스트 실행결과(스크린 샷) 업로드<br>
 
+### [Test Register(테스트 등록 정보)](https://github.com/Profiling-Based-UI-Test-Automation/test-storage/blob/development/src/main/java/teststorage/controller/TestRegisterController.java)
+테스트 등록 정보를 저장, 수정, 삭제, 읽을 수 있다..
 
+> endpoints<br>
+   * GET /test/{testId} testId를 갖는 테스트 등록 정보 조회<br>
+   * DELETE /test/{testId} testId를 갖는 테스트 등록 정보 삭제<br>
+   * PUT /test?{"apkId": "string", "appId": "string", "tcId": "string", "testDescription": "string", "testDevices": ["string"], "testName": "string"} testId를 갖는 테스트 등록 정보 변경<br>
+   * POST /test?{"apkId": "string", "appId": "string", "tcId": "string", "testDescription": "string", "testDevices": ["string"], "testName": "string", "regDate": {}, "testId": "string"} testId를 갖는 테스트 등록 정보 추가<br>
 
 
 
