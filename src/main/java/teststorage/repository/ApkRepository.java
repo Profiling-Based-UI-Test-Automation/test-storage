@@ -17,9 +17,7 @@
 package teststorage.repository;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;

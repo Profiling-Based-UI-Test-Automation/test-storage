@@ -8,8 +8,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import teststorage.model.Apk;
-import teststorage.model.ApkVersion;
 import teststorage.model.Tc;
 import teststorage.model.TcVersion;
 import teststorage.repository.TCRepository;

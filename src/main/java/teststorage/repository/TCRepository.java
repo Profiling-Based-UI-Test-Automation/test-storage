@@ -23,8 +23,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 
-import teststorage.model.Apk;
-import teststorage.model.ApkVersion;
 import teststorage.model.Tc;
 import teststorage.model.TcVersion;
 

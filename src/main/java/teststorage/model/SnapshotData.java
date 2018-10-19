@@ -1,8 +1,5 @@
 package teststorage.model;
 
-import org.springframework.data.annotation.Id;
-
-import lombok.Data;
 
 public class SnapshotData {
 	
